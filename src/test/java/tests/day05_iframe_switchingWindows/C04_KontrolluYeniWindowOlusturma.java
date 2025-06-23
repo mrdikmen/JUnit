@@ -1,4 +1,4 @@
-package tests.day5_iframe_switchingWindows;
+package tests.day05_iframe_switchingWindows;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
