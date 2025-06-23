@@ -1,4 +1,4 @@
-package tests.day09_jsAlerts_basicAuthentication;
+package tests.day04_jsAlerts_basicAuthentication;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
