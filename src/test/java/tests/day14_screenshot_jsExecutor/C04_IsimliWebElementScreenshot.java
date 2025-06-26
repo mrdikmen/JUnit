@@ -1,0 +1,74 @@
+package tests.day14_screenshot_jsExecutor;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebElement;
+
+import java.io.File;
+import java.io.IOException;
+
+public class C04_IsimliWebElementScreenshot extends utilities.TestBase_Each {
+
+    @Test
+    public void test01() throws IOException {
+
+        // Testotomasyonu anasayfaya gidin
+        driver.get("https://www.testotomasyonu.com");
+
+        // phone icin arama yapin
+        WebElement aramaKutusu = driver.findElement(By.id("global-search"));
+        aramaKutusu.sendKeys("phone" + Keys.ENTER);
+
+        // arama sonucunda urun bulunabildigini test edin
+        WebElement aramaSonucElementi= driver.findElement(By.className("product-count-text"));
+
+        String unExpectedAramaSonucu = "0 Products Found";
+        String actualAramaSonucu = aramaSonucElementi.getText();
+
+        Assertions.assertNotEquals(unExpectedAramaSonucu,actualAramaSonucu);
+        utilities.ReusableMethods.bekle(1);
+
+        // arama sonucu elementinin screenshot'ini alip kaydedin
+
+        utilities.ReusableMethods.webElementResimCek(aramaSonucElementi,"aramasonucu");
+
+
+        // 1.adim : screenshot alacaginiz webelementi locate edip, kaydedin
+        //          biz arama sonuc yazisi elementini zaten locate edip kaydetmistik
+
+        // 2.adim : screenshot'i kaydedecegimiz dosyayi(File) olusturun
+        String dosyaYolu = "target/screenshots/istenenWebElement.jpg";
+        File asilResim = new File(dosyaYolu);
+
+        // 3.adim : webElement'i kullanarak screenshot alip
+        //          gecici bir dosyaya(File) kaydedin
+        File geciciResim = aramaSonucElementi.getScreenshotAs(OutputType.FILE);
+
+        // 4.adim : gecici resmi asil resme kopyalayin
+        FileUtils.copyFile(geciciResim,asilResim);
+
+
+        // ilk urunu tiklayin
+        driver.findElement(By.xpath("(//*[@class='prod-img'])[1]")).click();
+
+
+        // acilan sayfada urun isminde case sensitive olmadan
+        // phone bulundugunu test edin
+
+        String expectedIsimIcerik = "phone";
+
+        WebElement urunIsimElementi = driver.findElement(By.xpath("//*[@class=' heading-sm mb-4']"));
+        String actualIsim = urunIsimElementi.getText().toLowerCase();
+
+        Assertions.assertTrue(actualIsim.contains(expectedIsimIcerik));
+
+        // rapora eklemek icin urun isim elementinin screenshot'ini alip kaydedin
+
+        utilities.ReusableMethods.webElementResimCek(urunIsimElementi,"urunIsmi");
+
+    }
+}
